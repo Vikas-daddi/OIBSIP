@@ -1,0 +1,95 @@
+name: Build and publish Android updates
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'Android-Task3-Calculator/**'
+      - '.github/workflows/android-release.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-release-main
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate signing secrets and prepare keystore
+        id: signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ] || [ -z "$ANDROID_KEYSTORE_PASSWORD" ] || [ -z "$ANDROID_KEY_ALIAS" ] || [ -z "$ANDROID_KEY_PASSWORD" ]; then
+            echo 'configured=false' >> "$GITHUB_OUTPUT"
+            echo '::notice::Add the four Android signing repository secrets, then run this workflow again to publish APK updates.'
+            exit 0
+          fi
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/oasis-upload-key.jks"
+          echo 'configured=true' >> "$GITHUB_OUTPUT"
+
+      - name: Set up Java
+        if: steps.signing.outputs.configured == 'true'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android SDK
+        if: steps.signing.outputs.configured == 'true'
+        uses: android-actions/setup-android@v3
+
+      - name: Install required SDK packages
+        if: steps.signing.outputs.configured == 'true'
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+
+      - name: Set up Gradle
+        if: steps.signing.outputs.configured == 'true'
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+
+      - name: Build signed release APK
+        if: steps.signing.outputs.configured == 'true'
+        working-directory: Android-Task3-Calculator
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/oasis-upload-key.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          version_name="1.0.${GITHUB_RUN_NUMBER}"
+          version_code="$((1000000 + GITHUB_RUN_NUMBER))"
+          gradle --no-daemon :app:assembleRelease \
+            -PAPP_VERSION_NAME="$version_name" \
+            -PAPP_VERSION_CODE="$version_code"
+          mkdir -p "$RUNNER_TEMP/release"
+          cp app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/release/oasis-calculator.apk"
+          echo "VERSION_NAME=$version_name" >> "$GITHUB_ENV"
+
+      - name: Publish latest APK release
+        if: steps.signing.outputs.configured == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="v${VERSION_NAME}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "$RUNNER_TEMP/release/oasis-calculator.apk" --clobber
+          else
+            gh release create "$tag" "$RUNNER_TEMP/release/oasis-calculator.apk" \
+              --title "Oasis Calculator $VERSION_NAME" \
+              --notes "Automated signed APK build from commit $GITHUB_SHA. Install the app once from this release; later versions are detected in the app. Android will ask you to approve each installation."
+          fi

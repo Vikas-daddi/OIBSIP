@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6fa">
+  <title>Oasis Calculator — Live Demo</title>
+  <style>
+    :root { color-scheme: light; --ink:#171a27; --muted:#73788b; --blue:#5b5ce2; --pale:#e4e5ff; --paper:#f5f6fa; font-family:Inter,"Segoe UI",Arial,sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); }
+    .wrap { width:min(1080px,calc(100% - 40px)); margin:auto; }
+    header { display:flex; align-items:center; justify-content:space-between; padding:24px 0; }
+    .brand { display:flex; gap:12px; align-items:center; color:var(--ink); text-decoration:none; font-size:13px; font-weight:800; letter-spacing:1.5px; }
+    .mark { width:38px; height:38px; display:grid; place-items:center; border-radius:13px; background:var(--blue); color:#8be3d3; font-size:27px; line-height:1; }
+    .repo { color:#4245aa; text-decoration:none; font-size:14px; font-weight:650; }
+    main { display:grid; grid-template-columns:1fr 360px; gap:60px; align-items:center; min-height:calc(100vh - 92px); padding:30px 0 70px; }
+    .eyebrow { color:#555b75; font-size:12px; font-weight:800; letter-spacing:1.8px; text-transform:uppercase; }
+    h1 { max-width:560px; margin:18px 0; font-size:clamp(42px,6vw,70px); line-height:1.04; letter-spacing:-3px; }
+    .lede { max-width:500px; margin:0; color:#646a7b; font-size:18px; line-height:1.7; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+    .action { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 19px; border-radius:13px; background:var(--blue); color:white; text-decoration:none; font-size:14px; font-weight:700; box-shadow:0 7px 18px #5b5ce233; }
+    .action.secondary { background:white; color:#4145b6; box-shadow:0 1px 5px #25283a15; }
+    .note { max-width:490px; margin-top:19px; color:#85899a; font-size:12px; line-height:1.65; }
+    .calculator { padding:25px; border:1px solid #e5e6ed; border-radius:29px; background:#f8f9fc; box-shadow:0 24px 65px #22283a12; }
+    .calc-brand { color:var(--muted); font-size:11px; font-weight:750; letter-spacing:1.6px; }
+    .expression { min-height:80px; margin-top:75px; overflow:hidden; color:var(--muted); font-size:24px; text-align:right; white-space:nowrap; }
+    .display { min-height:72px; overflow:hidden; font-size:56px; font-weight:400; letter-spacing:-2px; text-align:right; white-space:nowrap; }
+    .keys { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:20px; }
+    button { min-height:62px; border:0; border-radius:17px; background:#fff; color:#202337; font:500 20px inherit; font-size:20px; cursor:pointer; box-shadow:0 1px 5px #25283a0b; transition:transform .12s,filter .12s; }
+    button:hover { filter:brightness(.97); transform:translateY(-1px); }
+    button:focus-visible { outline:3px solid #8889f0; outline-offset:2px; }
+    .utility { background:#e8eaf2; color:#555b75; font-size:16px; }
+    .operator { background:var(--pale); color:#4145b6; }
+    .equals { background:var(--blue); color:white; }
+    footer { padding:22px 0 28px; border-top:1px solid #e4e5ec; color:#85899a; font-size:12px; }
+    @media(max-width:800px) { main { grid-template-columns:1fr; gap:38px; padding-top:45px; } .intro { text-align:center; } h1,.lede,.note { margin-left:auto; margin-right:auto; } .actions { justify-content:center; } .calculator { width:min(390px,100%); margin:auto; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="./"><span class="mark">◉</span><span>OASIS&nbsp; / &nbsp;CALCULATOR</span></a>
+      <a class="repo" href="https://github.com/Vikas-daddi/OIBSIP">View source ↗</a>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow">Android app · Task 3</div>
+        <h1>Simple math.<br>Clear thinking.</h1>
+        <p class="lede">A clean, responsive calculator built with Java and XML for the Oasis Infobyte Android App Development track.</p>
+        <div class="actions">
+          <a class="action" href="https://github.com/Vikas-daddi/OIBSIP/releases/latest">Get Android APK</a>
+          <a class="action secondary" href="https://github.com/Vikas-daddi/OIBSIP/tree/main/Android-Task3-Calculator">Explore the code</a>
+        </div>
+        <p class="note">This browser demo shows the same calculator flow. The Android APK is installed separately; updates are published as signed GitHub Releases and Android asks the user to approve each installation.</p>
+      </section>
+      <section class="calculator" aria-label="Interactive calculator demo">
+        <div class="calc-brand">OASIS&nbsp; / &nbsp;CALCULATOR</div>
+        <div class="expression" id="expression" aria-live="polite"></div>
+        <div class="display" id="display" aria-live="polite">0</div>
+        <div class="keys">
+          <button class="utility" data-key="C" aria-label="Clear">C</button><button class="utility" data-key="DEL" aria-label="Backspace">DEL</button><button class="utility" data-key="±" aria-label="Toggle sign">±</button><button class="operator" data-key="÷" aria-label="Divide">÷</button>
+          <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button class="operator" data-key="×">×</button>
+          <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button class="operator" data-key="−">−</button>
+          <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button class="operator" data-key="+">+</button>
+          <button class="utility" data-key="%">%</button><button data-key="0">0</button><button data-key=".">.</button><button class="equals" data-key="=">=</button>
+        </div>
+      </section>
+    </main>
+    <footer>Built for the Oasis Infobyte Android App Development internship. <a href="https://github.com/Vikas-daddi/OIBSIP" style="color:#555b75">Public source repository</a>.</footer>
+  </div>
+  <script>
+    (() => {
+      const display = document.getElementById('display');
+      const expressionDisplay = document.getElementById('expression');
+      let expression = '';
+      let justEvaluated = false;
+      const pretty = value => value.replaceAll('*','×').replaceAll('/','÷').replaceAll('-','−');
+      const format = value => Number.isFinite(value) ? (Object.is(value,-0) ? '0' : String(Number(value.toPrecision(12)))) : 'Error';
+      function evaluate(source) {
+        const tokens = source.replaceAll('×','*').replaceAll('÷','/').replaceAll('−','-');
+        let i=0;
+        function number(){ const start=i; let dot=false; while(i<tokens.length && /[0-9.]/.test(tokens[i])) { if(tokens[i]==='.'&&dot) throw Error(); dot ||= tokens[i]==='.'; i++; } if(start===i||tokens.slice(start,i)==='.') throw Error(); return Number(tokens.slice(start,i)); }
+        function unary(){ if(tokens[i]==='+'||tokens[i]==='-') { const sign=tokens[i++]; const n=unary(); return sign==='-'?-n:n; } return number(); }
+        function term(){ let n=unary(); while(tokens[i]==='*'||tokens[i]==='/') { const op=tokens[i++], r=unary(); if(op==='/'&&r===0) throw Error(); n=op==='*'?n*r:n/r; } return n; }
+        function sum(){ let n=term(); while(tokens[i]==='+'||tokens[i]==='-') { const op=tokens[i++], r=term(); n=op==='+'?n+r:n-r; } return n; }
+        const result=sum(); if(i!==tokens.length||!Number.isFinite(result)) throw Error(); return result;
+      }
+      function current(){ const m=expression.match(/(?:^|[+\-*/])(-?\d*\.?\d*)$/); return m?.[1]||'0'; }
+      function render(){ if(!justEvaluated){ expressionDisplay.textContent=pretty(expression); display.textContent=current(); } }
+      function press(key){
+        if(key==='C'){ expression=''; display.textContent='0'; expressionDisplay.textContent=''; justEvaluated=false; return; }
+        if(key==='DEL'){ if(justEvaluated){expression='';justEvaluated=false;} expression=expression.slice(0,-1); render(); return; }
+        if(key==='='){ if(!expression||/[+\-*/.]$/.test(expression)) return; try {const result=format(evaluate(expression)); expressionDisplay.textContent=pretty(expression); display.textContent=result; expression=''; justEvaluated=true;} catch {display.textContent='Error'; expressionDisplay.textContent='Invalid expression'; expression=''; justEvaluated=true;} return; }
+        if(key==='±'){ if(justEvaluated){const n=Number(display.textContent);display.textContent=format(-n);return;} const m=expression.match(/\d*\.?\d+$/); if(!m)return; const start=m.index; if(expression[start-1]==='-'&&(start-1===0||/[+*/]/.test(expression[start-2]))) expression=expression.slice(0,start-1)+expression.slice(start); else expression=expression.slice(0,start)+'-'+expression.slice(start); render(); return; }
+        if(key==='%'){ if(justEvaluated){display.textContent=format(Number(display.textContent)/100);return;} const m=expression.match(/-?\d*\.?\d+$/); if(!m)return; expression=expression.slice(0,m.index)+format(Number(m[0])/100); render(); return; }
+        if(justEvaluated){ expression=''; justEvaluated=false; }
+        if(/[+−×÷]/.test(key)){ if(!expression){if(key==='−')expression='-';} else if(/[+\-*/]$/.test(expression)) expression=expression.slice(0,-1)+({'+' : '+','−':'-','×':'*','÷':'/'}[key]); else if(!expression.endsWith('.')) expression+=({'+' : '+','−':'-','×':'*','÷':'/'}[key]); }
+        else if(key==='.'){ if(/[+\-*/]$/.test(expression)||!expression) expression+='0.'; else if(!current().includes('.')) expression+='.'; }
+        else if(/[0-9]/.test(key)){ if(expression.length>120)return; if(/(?:^|[+\-*/])0$/.test(expression)&&!expression.endsWith('.')) expression=expression.slice(0,-1)+key; else expression+=key; }
+        render();
+      }
+      document.querySelectorAll('[data-key]').forEach(button=>button.addEventListener('click',()=>press(button.dataset.key)));
+      document.addEventListener('keydown',event=>{ const map={'Enter':'=','Backspace':'DEL','Escape':'C','*':'×','/':'÷','-':'−'}; const key=map[event.key]||event.key; if(/^[0-9.]$/.test(key)||['=','DEL','C','+','−','×','÷'].includes(key)) {event.preventDefault();press(key);} });
+    })();
+  </script>
+</body>
+</html>
