@@ -8,10 +8,10 @@ Public internship repository for **Vikas Daddi**. Android work is organized in t
 
 Folder: [`Android-Task3-Calculator/`](Android-Task3-Calculator/)
 
-Native Android calculator written in Java and XML. It includes arithmetic with precedence, a responsive keypad, a custom launcher icon, and a self-hosted signed-APK update flow using GitHub Releases.
+Native Android calculator written in Java and XML. It includes arithmetic with precedence, a polished light interface, calculation history, memory controls, extra math operations, a custom launcher icon, and a self-hosted signed-APK update flow using GitHub Releases.
 
 - [Project README and Android Studio setup](Android-Task3-Calculator/README.md)
-- [Calculator UI preview](Android-Task3-Calculator/ui-preview.png)
+- [Calculator UI preview](Android-Task3-Calculator/ui-preview.svg)
 - [Interactive browser demo](https://vikas-daddi.github.io/OIBSIP/)
 - [Latest Android APK release](https://github.com/Vikas-daddi/OIBSIP/releases/latest)
 

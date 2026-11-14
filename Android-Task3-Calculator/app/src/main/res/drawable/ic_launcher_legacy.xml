@@ -4,9 +4,9 @@
     android:viewportWidth="48"
     android:viewportHeight="48">
     <path android:fillColor="@color/launcher_background" android:pathData="M0,0h48v48h-48z" />
-    <path
-        android:fillColor="#FFFFFFFF"
-        android:fillType="evenOdd"
-        android:pathData="M24,7C33.39,7 41,14.61 41,24S33.39,41 24,41 7,33.39 7,24 14.61,7 24,7ZM24,14C18.48,14 14,18.48 14,24S18.48,34 24,34 34,29.52 34,24 29.52,14 24,14Z" />
-    <path android:fillColor="@color/launcher_accent" android:pathData="M24,19C26.76,19 29,21.24 29,24S26.76,29 24,29 19,26.76 19,24 21.24,19 24,19Z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M17,6h14c3.87,0 7,3.13 7,7v22c0,3.87 -3.13,7 -7,7L17,42c-3.87,0 -7,-3.13 -7,-7L10,13c0,-3.87 3.13,-7 7,-7z" />
+    <path android:fillColor="#585BDE" android:pathData="M15,11h18v7L15,18z" />
+    <path android:fillColor="#9AE2D2" android:pathData="M17,13h9v2h-9zM28,13h3v3h-3z" />
+    <path android:fillColor="#585BDE" android:pathData="M15,21h4v4h-4zM22,21h4v4h-4zM29,21h4v4h-4zM15,28h4v4h-4zM22,28h4v4h-4z" />
+    <path android:fillColor="#9AE2D2" android:pathData="M29,28h4v4h-4z" />
 </vector>

@@ -3,11 +3,9 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:fillColor="#FFFFFFFF"
-        android:fillType="evenOdd"
-        android:pathData="M54,25C70.02,25 83,37.98 83,54S70.02,83 54,83 25,70.02 25,54 37.98,25 54,25ZM54,37C44.61,37 37,44.61 37,54S44.61,71 54,71 71,63.39 71,54 63.39,37 54,37Z" />
-    <path
-        android:fillColor="@color/launcher_accent"
-        android:pathData="M54,46C58.42,46 62,49.58 62,54S58.42,62 54,62 46,58.42 46,54 49.58,46 54,46Z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M35,18h38c7.18,0 13,5.82 13,13v46c0,7.18 -5.82,13 -13,13L35,90c-7.18,0 -13,-5.82 -13,-13L22,31c0,-7.18 5.82,-13 13,-13z" />
+    <path android:fillColor="#585BDE" android:pathData="M34,30h40v14L34,44z" />
+    <path android:fillColor="#9AE2D2" android:pathData="M37,34h21v3L37,37zM64,34h6v6h-6z" />
+    <path android:fillColor="#585BDE" android:pathData="M35,52h9v9h-9zM50,52h9v9h-9zM65,52h9v9h-9zM35,67h9v9h-9zM50,67h9v9h-9z" />
+    <path android:fillColor="#9AE2D2" android:pathData="M65,67h9v9h-9z" />
 </vector>
