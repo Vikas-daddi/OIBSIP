@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -26,16 +27,23 @@ public final class MainActivity extends Activity implements View.OnClickListener
     private static final String STATE_EXPRESSION = "calculator.expression";
     private static final String STATE_RESULT = "calculator.result";
     private static final String STATE_JUST_EVALUATED = "calculator.justEvaluated";
+    private static final String STATE_SCIENTIFIC_OPEN = "calculator.scientificOpen";
     private static final String PREFS_NAME = "oasis_calculator";
     private static final String PREF_MEMORY = "memory.value";
     private static final String PREF_HAS_MEMORY = "memory.hasValue";
     private static final String PREF_HISTORY = "calculation.history";
+    private static final String PREF_THEME_MODE = "theme.mode";
+    private static final int THEME_FOLLOW_SYSTEM = 0;
+    private static final int THEME_LIGHT = 1;
+    private static final int THEME_DARK = 2;
     private static final int MAX_HISTORY_ITEMS = 30;
 
     private TextView expressionDisplay;
     private TextView resultDisplay;
     private TextView memoryIndicator;
     private AlertDialog historyDialog;
+    private Button themeButton;
+    private LinearLayout scientificPanel;
     private StringBuilder expression = new StringBuilder();
     private final List<String> history = new ArrayList<>();
     private SharedPreferences preferences;
@@ -44,7 +52,23 @@ public final class MainActivity extends Activity implements View.OnClickListener
     private boolean hasMemoryValue;
     private boolean justEvaluated;
     private boolean showingError;
+    private boolean darkTheme;
     private SelfUpdateManager selfUpdateManager;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        int requestedTheme = base.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getInt(PREF_THEME_MODE, THEME_FOLLOW_SYSTEM);
+        if (requestedTheme != THEME_FOLLOW_SYSTEM) {
+            Configuration configuration = new Configuration(base.getResources().getConfiguration());
+            int nightMode = requestedTheme == THEME_DARK
+                    ? Configuration.UI_MODE_NIGHT_YES : Configuration.UI_MODE_NIGHT_NO;
+            configuration.uiMode = (configuration.uiMode & ~Configuration.UI_MODE_NIGHT_MASK) | nightMode;
+            super.attachBaseContext(base.createConfigurationContext(configuration));
+        } else {
+            super.attachBaseContext(base);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +78,23 @@ public final class MainActivity extends Activity implements View.OnClickListener
         expressionDisplay = findViewById(R.id.expressionDisplay);
         resultDisplay = findViewById(R.id.resultDisplay);
         memoryIndicator = findViewById(R.id.memoryIndicator);
+        themeButton = findViewById(R.id.themeButton);
+        scientificPanel = findViewById(R.id.scientificPanel);
         preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         loadSavedData();
+        darkTheme = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
         selfUpdateManager = new SelfUpdateManager(this);
 
         bindButtons((ViewGroup) findViewById(android.R.id.content));
+        updateThemeButton();
+        findViewById(R.id.scientificToggle).setOnClickListener(view -> toggleScientificPanel());
+        themeButton.setOnLongClickListener(view -> {
+            preferences.edit().remove(PREF_THEME_MODE).apply();
+            Toast.makeText(this, "Following system theme", Toast.LENGTH_SHORT).show();
+            recreate();
+            return true;
+        });
         resultDisplay.setOnLongClickListener(view -> {
             copyResult();
             return true;
@@ -68,6 +104,9 @@ public final class MainActivity extends Activity implements View.OnClickListener
             expression = new StringBuilder(savedInstanceState.getString(STATE_EXPRESSION, ""));
             shownResult = savedInstanceState.getString(STATE_RESULT, "0");
             justEvaluated = savedInstanceState.getBoolean(STATE_JUST_EVALUATED, false);
+            scientificPanel.setVisibility(savedInstanceState.getBoolean(STATE_SCIENTIFIC_OPEN, false)
+                    ? View.VISIBLE : View.GONE);
+            updateScientificToggle();
         }
         render();
         selfUpdateManager.checkForUpdate();
@@ -96,17 +135,26 @@ public final class MainActivity extends Activity implements View.OnClickListener
         outState.putString(STATE_EXPRESSION, expression.toString());
         outState.putString(STATE_RESULT, shownResult);
         outState.putBoolean(STATE_JUST_EVALUATED, justEvaluated);
+        outState.putBoolean(STATE_SCIENTIFIC_OPEN, scientificPanel.getVisibility() == View.VISIBLE);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onClick(View view) {
         if (!(view instanceof Button)) return;
+        if (view.getId() == R.id.themeButton) {
+            toggleTheme();
+            return;
+        }
+        if (view.getId() == R.id.historyButton) {
+            showHistory();
+            return;
+        }
         String key = ((Button) view).getText().toString();
 
-        if ("C".equals(key)) {
+        if ("C".equals(key) || "AC".equals(key)) {
             clear();
-        } else if ("DEL".equals(key)) {
+        } else if ("DEL".equals(key) || "⌫".equals(key)) {
             backspace();
         } else if ("=".equals(key)) {
             calculate();
@@ -118,8 +166,13 @@ public final class MainActivity extends Activity implements View.OnClickListener
             applyUnary(false);
         } else if ("x²".equals(key)) {
             applyUnary(true);
-        } else if ("◷".equals(key)) {
-            showHistory();
+        } else if ("()".equals(key)) {
+            appendParenthesis();
+        } else if ("sin".equals(key) || "cos".equals(key) || "tan".equals(key)
+                || "ln".equals(key) || "log".equals(key)) {
+            applyScientificFunction(key);
+        } else if ("(".equals(key) || ")".equals(key)) {
+            appendParenthesis(key);
         } else if ("Copy".equals(key)) {
             copyResult();
         } else if ("MC".equals(key)) {
@@ -166,7 +219,9 @@ public final class MainActivity extends Activity implements View.OnClickListener
     private void appendDigit(String digit) {
         beginFreshEntryIfNeeded();
         if (expression.length() >= 128) return;
-        if (endsWithOperator()) {
+        if (expression.length() > 0 && expression.charAt(expression.length() - 1) == ')') {
+            expression.append('*').append(digit);
+        } else if (endsWithOperator()) {
             expression.append(digit);
         } else {
             int start = currentNumberStart();
@@ -185,7 +240,9 @@ public final class MainActivity extends Activity implements View.OnClickListener
     private void appendDecimal() {
         beginFreshEntryIfNeeded();
         if (expression.length() >= 128) return;
-        if (endsWithOperator() || expression.length() == 0) {
+        if (expression.length() > 0 && expression.charAt(expression.length() - 1) == ')') {
+            expression.append("*0.");
+        } else if (endsWithOperator() || expression.length() == 0) {
             expression.append("0.");
         } else {
             String current = currentEntry();
@@ -205,6 +262,10 @@ public final class MainActivity extends Activity implements View.OnClickListener
             return;
         }
         char last = expression.charAt(expression.length() - 1);
+        if (last == '(') {
+            if ("−".equals(operator)) expression.append('-');
+            return;
+        }
         if (isOperatorChar(last)) {
             if (expression.length() == 1 && last == '-') return;
             expression.setCharAt(expression.length() - 1, toAsciiOperator(operator));
@@ -243,7 +304,28 @@ public final class MainActivity extends Activity implements View.OnClickListener
             justEvaluated = true;
             return;
         }
+        if (expression.length() > 0 && expression.charAt(expression.length() - 1) == ')') {
+            try {
+                double value = CalculatorExpression.evaluate(expression.toString()) / 100d;
+                expression.setLength(0);
+                expression.append(CalculatorExpression.format(value));
+                shownResult = expression.toString();
+            } catch (IllegalArgumentException | ArithmeticException exception) {
+                showError("Invalid expression");
+            }
+            return;
+        }
         if (expression.length() == 0 || endsWithOperator()) return;
+        if (expression.charAt(expression.length() - 1) == ')') {
+            try {
+                double value = CalculatorExpression.evaluate(expression.toString());
+                expression = new StringBuilder("-(" + expression + ")");
+                shownResult = CalculatorExpression.format(-value);
+            } catch (IllegalArgumentException | ArithmeticException exception) {
+                showError("Invalid expression");
+            }
+            return;
+        }
         int start = currentNumberStart();
         try {
             double number = Double.parseDouble(expression.substring(start));
@@ -278,8 +360,9 @@ public final class MainActivity extends Activity implements View.OnClickListener
 
     private void applyUnary(boolean square) {
         if (showingError) clear();
-        String valueBefore = shownResult;
+        String valueBefore;
         try {
+            valueBefore = justEvaluated ? shownResult : currentEntry();
             double value = Double.parseDouble(valueBefore);
             if (!square && value < 0d) {
                 showError("Square root needs a positive number");
@@ -290,12 +373,116 @@ public final class MainActivity extends Activity implements View.OnClickListener
             if (justEvaluated) {
                 expressionDisplay.setText((square ? valueBefore + "²" : "√(" + valueBefore + ")"));
             } else {
-                int start = currentNumberStart();
-                expression.replace(start, expression.length(), shownResult);
+                replaceCurrentValue(shownResult);
             }
         } catch (IllegalArgumentException exception) {
             showError("Result is outside the supported range");
         }
+    }
+
+    private void applyScientificFunction(String function) {
+        if ("Copy".equals(function)) {
+            copyResult();
+            return;
+        }
+        if (showingError) clear();
+        String valueBefore;
+        try {
+            valueBefore = justEvaluated ? shownResult : currentEntry();
+            double value = Double.parseDouble(valueBefore);
+            double result;
+            switch (function) {
+                case "sin": result = Math.sin(Math.toRadians(value)); break;
+                case "cos": result = Math.cos(Math.toRadians(value)); break;
+                case "tan": result = Math.tan(Math.toRadians(value)); break;
+                case "ln":
+                    if (value <= 0d) throw new IllegalArgumentException("Logarithm needs a positive number");
+                    result = Math.log(value);
+                    break;
+                case "log":
+                    if (value <= 0d) throw new IllegalArgumentException("Logarithm needs a positive number");
+                    result = Math.log10(value);
+                    break;
+                default: return;
+            }
+            if (!Double.isFinite(result)) throw new IllegalArgumentException("Result is outside the supported range");
+            shownResult = CalculatorExpression.format(result);
+            if (justEvaluated) {
+                expressionDisplay.setText(function + "(" + valueBefore + (isTrigonometric(function) ? "°)" : ")"));
+            } else {
+                replaceCurrentValue(shownResult);
+            }
+        } catch (NumberFormatException | ArithmeticException exception) {
+            showError("Invalid scientific operation");
+        } catch (IllegalArgumentException exception) {
+            showError(exception.getMessage() == null ? "Invalid scientific operation" : exception.getMessage());
+        }
+    }
+
+    private void replaceCurrentValue(String value) {
+        if (expression.length() > 0 && expression.charAt(expression.length() - 1) == ')') {
+            expression.setLength(0);
+            expression.append(value);
+            return;
+        }
+        int start = currentNumberStart();
+        expression.replace(start, expression.length(), value);
+    }
+
+    private void appendParenthesis() {
+        beginFreshEntryIfNeeded();
+        if (expression.length() >= 128) return;
+        int open = 0;
+        int close = 0;
+        for (int index = 0; index < expression.length(); index++) {
+            if (expression.charAt(index) == '(') open++;
+            else if (expression.charAt(index) == ')') close++;
+        }
+        char last = expression.length() == 0 ? '\0' : expression.charAt(expression.length() - 1);
+        boolean canClose = open > close && ((last >= '0' && last <= '9') || last == ')' || last == '.');
+        if (canClose) {
+            expression.append(')');
+        } else {
+            if ((last >= '0' && last <= '9') || last == ')' || last == '.') expression.append('*');
+            expression.append('(');
+        }
+        shownResult = currentEntry();
+    }
+
+    private void appendParenthesis(String bracket) {
+        if ("(".equals(bracket)) {
+            beginFreshEntryIfNeeded();
+            if (expression.length() > 0) {
+                char last = expression.charAt(expression.length() - 1);
+                if ((last >= '0' && last <= '9') || last == ')') expression.append('*');
+            }
+            expression.append('(');
+        } else if (expression.length() > 0 && !endsWithOperator()) {
+            expression.append(')');
+        }
+        shownResult = currentEntry();
+    }
+
+    private void toggleScientificPanel() {
+        scientificPanel.setVisibility(scientificPanel.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        updateScientificToggle();
+    }
+
+    private void updateScientificToggle() {
+        Button toggle = findViewById(R.id.scientificToggle);
+        boolean expanded = scientificPanel.getVisibility() == View.VISIBLE;
+        toggle.setText((expanded ? "⌃  " : "⌄  ") + "Scientific");
+        toggle.setContentDescription(expanded ? "Hide scientific calculator functions" : "Show scientific calculator functions");
+    }
+
+    private void toggleTheme() {
+        preferences.edit().putInt(PREF_THEME_MODE, darkTheme ? THEME_LIGHT : THEME_DARK).apply();
+        recreate();
+    }
+
+    private void updateThemeButton() {
+        themeButton.setText(darkTheme ? "☀" : "☾");
+        themeButton.setContentDescription(darkTheme ? "Switch to light theme" : "Switch to dark theme");
     }
 
     private void loadSavedData() {
@@ -459,7 +646,9 @@ public final class MainActivity extends Activity implements View.OnClickListener
     }
 
     private boolean endsWithOperator() {
-        return expression.length() > 0 && isOperatorChar(expression.charAt(expression.length() - 1));
+        if (expression.length() == 0) return false;
+        char last = expression.charAt(expression.length() - 1);
+        return isOperatorChar(last) || last == '(';
     }
 
     private int currentNumberStart() {
@@ -470,7 +659,7 @@ public final class MainActivity extends Activity implements View.OnClickListener
             else break;
         }
         if (index >= 0 && expression.charAt(index) == '-') {
-            if (index == 0 || isOperatorChar(expression.charAt(index - 1))) index--;
+            if (index == 0 || isOperatorChar(expression.charAt(index - 1)) || expression.charAt(index - 1) == '(') index--;
         }
         return index + 1;
     }
@@ -478,13 +667,29 @@ public final class MainActivity extends Activity implements View.OnClickListener
     private String currentEntry() {
         if (expression.length() == 0) return "0";
         if (endsWithOperator()) return "0";
+        if (expression.charAt(expression.length() - 1) == ')') {
+            try {
+                return CalculatorExpression.format(CalculatorExpression.evaluate(expression.toString()));
+            } catch (IllegalArgumentException | ArithmeticException ignored) {
+                return "0";
+            }
+        }
         return expression.substring(currentNumberStart());
     }
 
     private void render() {
         if (!showingError && !justEvaluated) {
             expressionDisplay.setText(expression.toString().replace('*', '×').replace('/', '÷').replace('-', '−'));
-            shownResult = currentEntry();
+            String current = currentEntry();
+            if (expression.length() > 0 && !endsWithOperator() && expression.charAt(expression.length() - 1) != '.') {
+                try {
+                    shownResult = CalculatorExpression.format(CalculatorExpression.evaluate(expression.toString()));
+                } catch (IllegalArgumentException | ArithmeticException exception) {
+                    shownResult = current;
+                }
+            } else {
+                shownResult = current;
+            }
         }
         resultDisplay.setText(shownResult);
         resultDisplay.setTextColor(getColor(showingError ? R.color.error_text : R.color.display_text));
@@ -501,6 +706,10 @@ public final class MainActivity extends Activity implements View.OnClickListener
 
     private static boolean isDigit(String value) {
         return value.length() == 1 && value.charAt(0) >= '0' && value.charAt(0) <= '9';
+    }
+
+    private static boolean isTrigonometric(String function) {
+        return "sin".equals(function) || "cos".equals(function) || "tan".equals(function);
     }
 
     private static boolean isOperator(String value) {

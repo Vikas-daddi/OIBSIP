@@ -7,17 +7,22 @@ An Android calculator built with Java and XML for the Oasis Infobyte Android App
 - Responsive four-column keypad built with Android `GridLayout`.
 - Addition, subtraction, multiplication, and division with normal operator precedence.
 - Decimal input, sign toggle, percentage, clear, and backspace controls.
+- Parentheses and grouped expressions with normal operator precedence.
+- Expandable scientific panel with sine, cosine, tangent (in degrees), square root, square, natural log, and log base ten.
 - Square root and square operations for the current number.
 - Calculation history with the latest 30 results saved across app launches; tap an item to reuse its answer.
 - Persistent calculator memory: `MC`, `MR`, `M+`, and `M−`.
 - Copy the displayed answer using the **Copy** button or by long-pressing the result.
-- Colorful light and dark themes that follow the phone's system appearance, with a high-contrast result display and a custom Oasis calculator logo.
+- Colorful light and dark themes with a top-bar switch; long-press the switch to return to the phone's system theme.
+- Live expression preview, high-contrast display, and a custom Oasis calculator logo inspired by the reference layout.
 - Division-by-zero and malformed-expression handling with a visible `Error` state.
 - Calculator state retained through screen recreation, such as device rotation.
 - Accessible labels for calculator controls and the result display.
 - Best-effort update check against the public `Vikas-daddi/OIBSIP` GitHub Releases feed.
 - Update download via Android `DownloadManager`, followed by Android's package installer for user approval.
 - No passwords, API keys, or GitHub authentication token are embedded in the app.
+
+See the [light theme mockup](ui-preview.svg) and [dark theme mockup](ui-preview-dark.svg), or open the [preview page](ui-preview.html) to switch between them.
 
 ## Requirements
 
@@ -36,9 +41,9 @@ The app's application ID is `com.oasisinfobyte.calculator`. No credentials or AP
 
 ## How to use
 
-Tap digits and operators to build an expression, then tap `=` to evaluate it. The calculator follows normal precedence (multiplication and division before addition and subtraction). `C` clears the expression, `DEL` removes the last entered character, `±` toggles the sign of the current number, `%` converts the current number to a percentage, `√x` takes its square root, and `x²` squares it. Use the history icon to reopen a recent answer. The memory row stores and recalls values between sessions. Tap **Copy** or long-press the result to copy it.
+Tap digits and operators to build an expression, then tap `=` to evaluate it. The calculator follows normal precedence (multiplication and division before addition and subtraction). `AC` clears the expression, the backspace key removes the last character, `()` adds grouping parentheses, and `±` toggles the current number's sign. Open **Scientific** for trig and logarithm functions plus persistent memory controls. The history icon reopens recent answers. Tap **Copy** or long-press the result to copy it.
 
-The app follows your Android **Dark theme** setting automatically. Turn Dark theme on or off in Quick Settings or your phone's Display settings to switch the calculator appearance.
+Tap the moon or sun button in the top bar to switch themes. Long-press it to follow the phone's system theme again.
 
 Examples:
 

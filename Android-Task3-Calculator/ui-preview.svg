@@ -1,65 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="430" height="920" viewBox="0 0 430 920" role="img" aria-labelledby="title description">
-  <title id="title">Oasis Calculator updated light UI preview</title>
-  <desc id="description">A light calculator screen with an Oasis logo, calculation history, display card, memory buttons, square root and square functions, and a rounded four-column keypad.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="900" viewBox="0 0 430 900" role="img" aria-labelledby="title description">
+  <title id="title">Oasis Calculator in light theme</title>
+  <desc id="description">Calculator concept inspired by the user's reference: compact app bar, large expression card, scientific controls, rounded number keys, coral clear key, and blue operators.</desc>
   <defs>
-    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F7F8FE"/><stop offset="1" stop-color="#ECEFFD"/></linearGradient>
-    <linearGradient id="display" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#E7E9FF"/><stop offset="1" stop-color="#FFF0F6"/></linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#27304B" flood-opacity=".10"/></filter>
-    <filter id="keyshadow" x="-15%" y="-15%" width="130%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#29304A" flood-opacity=".06"/></filter>
+    <linearGradient id="screen" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="#F8F9FC"/><stop offset="1" stop-color="#EEF1F6"/></linearGradient>
+    <linearGradient id="display" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FAFBFE"/><stop offset="1" stop-color="#EDF3FB"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#344054" flood-opacity=".09"/></filter>
+    <filter id="keyshadow" x="-15%" y="-15%" width="130%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#344054" flood-opacity=".08"/></filter>
   </defs>
-  <rect width="430" height="920" rx="38" fill="url(#screen)"/>
-  <text x="31" y="42" fill="#22263A" font-family="Arial,sans-serif" font-size="15" font-weight="700">9:41</text>
-  <text x="322" y="42" fill="#22263A" font-family="Arial,sans-serif" font-size="13" font-weight="700">5G  ·  92%</text>
+  <rect width="430" height="900" rx="38" fill="url(#screen)"/>
+  <text x="30" y="36" fill="#202124" font-family="Arial,sans-serif" font-size="14" font-weight="700">11:36</text>
+  <text x="345" y="36" fill="#202124" font-family="Arial,sans-serif" font-size="13" font-weight="700">5G  ·  92%</text>
+  <rect x="23" y="54" width="30" height="30" rx="9" fill="#585BDE"/>
+  <rect x="31" y="59" width="14" height="20" rx="3" fill="#FFFFFF"/>
+  <rect x="33" y="62" width="10" height="4" fill="#585BDE"/>
+  <path d="M33 69h3v3h-3zm5 0h3v3h-3zm-5 5h3v3h-3zm5 0h3v3h-3z" fill="#585BDE"/>
+  <text x="63" y="74" fill="#202124" font-family="Arial,sans-serif" font-size="15" font-weight="700">Oasis Calculator</text>
+  <circle cx="349" cy="69" r="20" fill="#E5EAF2"/>
+  <text x="349" y="76" text-anchor="middle" fill="#42536B" font-family="Arial,sans-serif" font-size="21">◴</text>
+  <circle cx="397" cy="69" r="20" fill="#E5EAF2"/>
+  <text x="397" y="76" text-anchor="middle" fill="#42536B" font-family="Arial,sans-serif" font-size="22">☾</text>
 
-  <rect x="26" y="66" width="44" height="44" rx="13" fill="#585BDE"/>
-  <rect x="39" y="73" width="19" height="30" rx="4" fill="#FFFFFF"/>
-  <rect x="42" y="77" width="13" height="6" fill="#585BDE"/>
-  <path d="M42 88h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3zm-10 5h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3z" fill="#585BDE"/>
-  <text x="83" y="86" fill="#20243A" font-family="Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="1.4">OASIS</text>
-  <text x="83" y="103" fill="#858AA1" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="2">CALCULATOR</text>
-  <circle cx="371" cy="88" r="23" fill="#E9EBF5"/>
-  <text x="371" y="96" text-anchor="middle" fill="#525B78" font-family="Arial,sans-serif" font-size="25">◷</text>
+  <rect x="22" y="94" width="386" height="230" rx="23" fill="url(#display)" stroke="#E1E6EF" filter="url(#shadow)"/>
+  <rect x="38" y="108" width="39" height="21" rx="10.5" fill="#E8EEF7"/>
+  <text x="57.5" y="122.5" text-anchor="middle" fill="#475467" font-family="Arial,sans-serif" font-size="10" font-weight="700">DEG</text>
+  <text x="384" y="220" text-anchor="end" fill="#202124" font-family="Arial,sans-serif" font-size="30" font-weight="500">12,450 + 3,200</text>
+  <text x="384" y="261" text-anchor="end" fill="#69717C" font-family="Arial,sans-serif" font-size="23">15,650</text>
+  <path d="M38 278H392" stroke="#E1E6EF"/>
+  <rect x="38" y="288" width="126" height="27" rx="13.5" fill="#E7EDF7"/>
+  <text x="101" y="306" text-anchor="middle" fill="#30455F" font-family="Arial,sans-serif" font-size="12" font-weight="600">⌄  Scientific</text>
+  <text x="382" y="308" text-anchor="end" fill="#42536B" font-family="Arial,sans-serif" font-size="22">⌫</text>
 
-  <rect x="24" y="132" width="382" height="243" rx="27" fill="url(#display)" stroke="#D9DCF6" filter="url(#shadow)"/>
-  <text x="48" y="166" fill="#777D98" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="1.8">YOUR CALCULATION</text>
-  <rect x="355" y="149" width="29" height="22" rx="11" fill="#E7F6F1"/>
-  <text x="369.5" y="164" text-anchor="middle" fill="#25866D" font-family="Arial,sans-serif" font-size="11" font-weight="700">M</text>
-  <text x="380" y="278" text-anchor="end" fill="#6A6CB0" font-family="Arial,sans-serif" font-size="23">8 + 2 × 3</text>
-  <text x="380" y="335" text-anchor="end" fill="#262448" font-family="Arial,sans-serif" font-size="54" font-weight="700">14</text>
-  <text x="380" y="358" text-anchor="end" fill="#777D98" font-family="Arial,sans-serif" font-size="11">Long press result to copy</text>
+  <g font-family="Arial,sans-serif" font-size="22" text-anchor="middle" filter="url(#keyshadow)">
+    <circle cx="64" cy="369" r="34" fill="#FFDAD7"/><text x="64" y="377" fill="#9D292B" font-size="18">AC</text>
+    <circle cx="164" cy="369" r="34" fill="#E5EAF2"/><text x="164" y="377" fill="#384352" font-size="19">()</text>
+    <circle cx="264" cy="369" r="34" fill="#E5EAF2"/><text x="264" y="377" fill="#384352">%</text>
+    <circle cx="364" cy="369" r="34" fill="#D8E7FF"/><text x="364" y="377" fill="#174EA6">÷</text>
 
-  <g font-family="Arial,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
-    <rect x="27" y="390" width="88" height="42" rx="16" fill="#E7F5F0"/><text x="71" y="417" fill="#25866D">MC</text>
-    <rect x="122" y="390" width="88" height="42" rx="16" fill="#E7F5F0"/><text x="166" y="417" fill="#25866D">MR</text>
-    <rect x="217" y="390" width="88" height="42" rx="16" fill="#E7F5F0"/><text x="261" y="417" fill="#25866D">M+</text>
-    <rect x="312" y="390" width="88" height="42" rx="16" fill="#E7F5F0"/><text x="356" y="417" fill="#25866D">M−</text>
+    <circle cx="64" cy="453" r="34" fill="#FFFFFF"/><text x="64" y="461" fill="#202124">7</text>
+    <circle cx="164" cy="453" r="34" fill="#FFFFFF"/><text x="164" y="461" fill="#202124">8</text>
+    <circle cx="264" cy="453" r="34" fill="#FFFFFF"/><text x="264" y="461" fill="#202124">9</text>
+    <circle cx="364" cy="453" r="34" fill="#D8E7FF"/><text x="364" y="461" fill="#174EA6">×</text>
+
+    <circle cx="64" cy="537" r="34" fill="#FFFFFF"/><text x="64" y="545" fill="#202124">4</text>
+    <circle cx="164" cy="537" r="34" fill="#FFFFFF"/><text x="164" y="545" fill="#202124">5</text>
+    <circle cx="264" cy="537" r="34" fill="#FFFFFF"/><text x="264" y="545" fill="#202124">6</text>
+    <circle cx="364" cy="537" r="34" fill="#D8E7FF"/><text x="364" y="545" fill="#174EA6">−</text>
+
+    <circle cx="64" cy="621" r="34" fill="#FFFFFF"/><text x="64" y="629" fill="#202124">1</text>
+    <circle cx="164" cy="621" r="34" fill="#FFFFFF"/><text x="164" y="629" fill="#202124">2</text>
+    <circle cx="264" cy="621" r="34" fill="#FFFFFF"/><text x="264" y="629" fill="#202124">3</text>
+    <circle cx="364" cy="621" r="34" fill="#D8E7FF"/><text x="364" y="629" fill="#174EA6">+</text>
+
+    <circle cx="64" cy="705" r="34" fill="#FFFFFF"/><text x="64" y="713" fill="#202124">0</text>
+    <circle cx="164" cy="705" r="34" fill="#FFFFFF"/><text x="164" y="713" fill="#202124">.</text>
+    <circle cx="264" cy="705" r="34" fill="#E5EAF2"/><text x="264" y="713" fill="#384352" font-size="17">+/−</text>
+    <circle cx="364" cy="705" r="34" fill="#0B57D0"/><text x="364" y="713" fill="#FFFFFF" font-weight="700">=</text>
   </g>
-
-  <g font-family="Arial,sans-serif" font-size="23" text-anchor="middle" filter="url(#keyshadow)">
-    <g fill="#FFE9E5"><rect x="26" y="449" width="86" height="70" rx="20"/><rect x="124" y="449" width="86" height="70" rx="20"/><rect x="222" y="449" width="86" height="70" rx="20"/></g>
-    <g fill="#B45548"><text x="69" y="493">C</text><text x="167" y="493" font-size="17">DEL</text><text x="265" y="493" font-size="18">√x</text></g>
-    <rect x="320" y="449" width="84" height="70" rx="20" fill="#E5E3FF"/><text x="362" y="493" fill="#5549C9">÷</text>
-
-    <g fill="#FFFFFF"><rect x="26" y="531" width="86" height="70" rx="20"/><rect x="124" y="531" width="86" height="70" rx="20"/><rect x="222" y="531" width="86" height="70" rx="20"/></g>
-    <g fill="#252A40"><text x="69" y="575">7</text><text x="167" y="575">8</text><text x="265" y="575">9</text></g>
-    <rect x="320" y="531" width="84" height="70" rx="20" fill="#E5E3FF"/><text x="362" y="575" fill="#5549C9">×</text>
-
-    <g fill="#FFFFFF"><rect x="26" y="613" width="86" height="70" rx="20"/><rect x="124" y="613" width="86" height="70" rx="20"/><rect x="222" y="613" width="86" height="70" rx="20"/></g>
-    <g fill="#252A40"><text x="69" y="657">4</text><text x="167" y="657">5</text><text x="265" y="657">6</text></g>
-    <rect x="320" y="613" width="84" height="70" rx="20" fill="#E5E3FF"/><text x="362" y="657" fill="#5549C9">−</text>
-
-    <g fill="#FFFFFF"><rect x="26" y="695" width="86" height="70" rx="20"/><rect x="124" y="695" width="86" height="70" rx="20"/><rect x="222" y="695" width="86" height="70" rx="20"/></g>
-    <g fill="#252A40"><text x="69" y="739">1</text><text x="167" y="739">2</text><text x="265" y="739">3</text></g>
-    <rect x="320" y="695" width="84" height="70" rx="20" fill="#E5E3FF"/><text x="362" y="739" fill="#5549C9">+</text>
-
-    <g fill="#FFE9E5"><rect x="26" y="777" width="86" height="70" rx="20"/><rect x="222" y="777" width="86" height="70" rx="20"/></g>
-    <rect x="124" y="777" width="86" height="70" rx="20" fill="#FFFFFF"/><text x="69" y="821" fill="#525B78">±</text><text x="167" y="821" fill="#252A40">0</text><text x="265" y="821" fill="#525B78">%</text>
-    <rect x="320" y="777" width="84" height="70" rx="20" fill="#585BDE"/><text x="362" y="821" fill="#FFFFFF" font-weight="700">=</text>
-  </g>
-
-  <g font-family="Arial,sans-serif" font-size="14" font-weight="700" text-anchor="middle">
-    <rect x="103" y="860" width="104" height="36" rx="15" fill="#FFF2D9"/><text x="155" y="883" fill="#A76713">x²</text>
-    <rect x="222" y="860" width="104" height="36" rx="15" fill="#FFF2D9"/><text x="274" y="883" fill="#A76713">Copy</text>
-  </g>
-  <rect x="167" y="909" width="96" height="4" rx="2" fill="#C8CAD3"/>
+  <text x="215" y="866" text-anchor="middle" fill="#A7ABB5" font-family="Arial,sans-serif" font-size="18">—</text>
 </svg>

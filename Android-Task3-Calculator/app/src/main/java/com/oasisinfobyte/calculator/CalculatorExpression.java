@@ -2,7 +2,7 @@ package com.oasisinfobyte.calculator;
 
 import java.math.BigDecimal;
 
-/** Evaluates the calculator's four basic operators with normal precedence. */
+/** Evaluates arithmetic expressions with operator precedence and grouping parentheses. */
 final class CalculatorExpression {
     private final String source;
     private int position;
@@ -63,6 +63,19 @@ final class CalculatorExpression {
             char sign = source.charAt(position++);
             double value = parseUnary();
             return sign == '-' ? -value : value;
+        }
+        return parsePrimary();
+    }
+
+    private double parsePrimary() {
+        if (position < source.length() && source.charAt(position) == '(') {
+            position++;
+            double value = parseExpression();
+            if (position >= source.length() || source.charAt(position) != ')') {
+                throw new IllegalArgumentException("Closing parenthesis is missing");
+            }
+            position++;
+            return value;
         }
         return parseNumber();
     }
