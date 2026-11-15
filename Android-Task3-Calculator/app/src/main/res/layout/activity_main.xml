@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F5FA"
+    android:background="@color/calculator_background"
     android:orientation="vertical"
     android:paddingStart="18dp"
     android:paddingTop="12dp"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.08"
                 android:text="OASIS"
-                android:textColor="#20243A"
+                android:textColor="@color/title_text"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:text="CALCULATOR"
-                android:textColor="#858AA1"
+                android:textColor="@color/subtitle_text"
                 android:textSize="10sp"
                 android:letterSpacing="0.16" />
         </LinearLayout>
@@ -90,13 +90,13 @@
                 android:id="@+id/memoryIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#E7F6F1"
+                android:background="@color/memory_bg"
                 android:paddingStart="9dp"
                 android:paddingTop="4dp"
                 android:paddingEnd="9dp"
                 android:paddingBottom="4dp"
                 android:text="M"
-                android:textColor="#25866D"
+                android:textColor="@color/memory_text"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -114,7 +114,7 @@
             android:paddingTop="12dp"
             android:paddingBottom="3dp"
             android:text=""
-            android:textColor="#81869A"
+            android:textColor="@color/display_secondary"
             android:textSize="20sp" />
 
         <TextView
@@ -128,7 +128,7 @@
             android:minHeight="68dp"
             android:paddingBottom="5dp"
             android:text="0"
-            android:textColor="#20243A"
+            android:textColor="@color/display_text"
             android:textSize="48sp"
             android:textStyle="bold"
             android:contentDescription="Calculator result; long press to copy" />
@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:text="Long press result to copy"
-            android:textColor="#A4A8B6"
+            android:textColor="@color/hint_text"
             android:textSize="11sp" />
     </LinearLayout>
 

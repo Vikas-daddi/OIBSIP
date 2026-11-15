@@ -1,0 +1,28 @@
+<resources>
+    <color name="launcher_background">#7772F2</color>
+    <color name="launcher_accent">#9AE2D2</color>
+    <color name="calculator_background">#11131D</color>
+    <color name="display_start">#292B45</color>
+    <color name="display_end">#372638</color>
+    <color name="display_border">#454862</color>
+    <color name="title_text">#F7F6FF</color>
+    <color name="subtitle_text">#B6B8D0</color>
+    <color name="hint_text">#AEB1C8</color>
+    <color name="display_text">#FBFAFF</color>
+    <color name="display_secondary">#C1C2EE</color>
+    <color name="number_bg">#25283A</color>
+    <color name="number_text">#F4F4FC</color>
+    <color name="utility_bg">#493139</color>
+    <color name="utility_text">#FFB8A8</color>
+    <color name="operator_bg">#363254</color>
+    <color name="operator_text">#C8C1FF</color>
+    <color name="equals_bg">#7770F0</color>
+    <color name="memory_bg">#1C4037</color>
+    <color name="memory_text">#9DE6CD</color>
+    <color name="quick_bg">#463A24</color>
+    <color name="quick_text">#FFD28A</color>
+    <color name="dialog_bg">#1D2030</color>
+    <color name="dialog_text">#ECEEFF</color>
+    <color name="dialog_row_bg">#292C3F</color>
+    <color name="error_text">#FF90A3</color>
+</resources>

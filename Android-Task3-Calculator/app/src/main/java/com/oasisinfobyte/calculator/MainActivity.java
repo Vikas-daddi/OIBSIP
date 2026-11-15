@@ -338,7 +338,7 @@ public final class MainActivity extends Activity implements View.OnClickListener
         if (history.isEmpty()) {
             TextView empty = new TextView(this);
             empty.setText("Your calculations will appear here.");
-            empty.setTextColor(0xFF777D91);
+            empty.setTextColor(getColor(R.color.hint_text));
             empty.setTextSize(15);
             empty.setGravity(Gravity.CENTER);
             empty.setPadding(0, dp(28), 0, dp(28));
@@ -347,12 +347,12 @@ public final class MainActivity extends Activity implements View.OnClickListener
             for (String item : history) {
                 TextView row = new TextView(this);
                 row.setText(item);
-                row.setTextColor(0xFF30364B);
+                row.setTextColor(getColor(R.color.dialog_text));
                 row.setTextSize(17);
                 row.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
                 row.setPadding(dp(12), dp(14), dp(12), dp(14));
                 row.setBackgroundResource(R.drawable.key_background);
-                row.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFF2F3F9));
+                row.setBackgroundTintList(android.content.res.ColorStateList.valueOf(getColor(R.color.dialog_row_bg)));
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.bottomMargin = dp(8);
@@ -487,7 +487,7 @@ public final class MainActivity extends Activity implements View.OnClickListener
             shownResult = currentEntry();
         }
         resultDisplay.setText(shownResult);
-        resultDisplay.setTextColor(showingError ? 0xFFCE4D61 : 0xFF20243A);
+        resultDisplay.setTextColor(getColor(showingError ? R.color.error_text : R.color.display_text));
         resultDisplay.setContentDescription(showingError ? "Error: " + shownResult : "Result " + shownResult);
         memoryIndicator.setVisibility(hasMemoryValue ? View.VISIBLE : View.GONE);
     }

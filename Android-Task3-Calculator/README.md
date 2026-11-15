@@ -11,7 +11,7 @@ An Android calculator built with Java and XML for the Oasis Infobyte Android App
 - Calculation history with the latest 30 results saved across app launches; tap an item to reuse its answer.
 - Persistent calculator memory: `MC`, `MR`, `M+`, and `M−`.
 - Copy the displayed answer using the **Copy** button or by long-pressing the result.
-- Light display card, high-contrast result text, and an Oasis calculator launcher logo.
+- Colorful light and dark themes that follow the phone's system appearance, with a high-contrast result display and a custom Oasis calculator logo.
 - Division-by-zero and malformed-expression handling with a visible `Error` state.
 - Calculator state retained through screen recreation, such as device rotation.
 - Accessible labels for calculator controls and the result display.
@@ -37,6 +37,8 @@ The app's application ID is `com.oasisinfobyte.calculator`. No credentials or AP
 ## How to use
 
 Tap digits and operators to build an expression, then tap `=` to evaluate it. The calculator follows normal precedence (multiplication and division before addition and subtraction). `C` clears the expression, `DEL` removes the last entered character, `±` toggles the sign of the current number, `%` converts the current number to a percentage, `√x` takes its square root, and `x²` squares it. Use the history icon to reopen a recent answer. The memory row stores and recalls values between sessions. Tap **Copy** or long-press the result to copy it.
+
+The app follows your Android **Dark theme** setting automatically. Turn Dark theme on or off in Quick Settings or your phone's Display settings to switch the calculator appearance.
 
 Examples:
 
